@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test: Search Function Mythology</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: sans-serif; background: #f0f0f0; overflow: hidden; }
+        #mynetwork { width: 100vw; height: 100vh; border: 1px solid #ccc; background: #fff; }
+        
+        /* Search bar styling */
+        .search-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        input {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 250px;
+        }
+        button {
+            padding: 8px 15px;
+            font-size: 16px;
+            background: #4287f5;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        button:hover { background: #2a6bbd; }
+        
+        .legend {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="search-container">
+    <h3>🔍 Search God</h3>
+    <input type="text" id="searchInput" placeholder="Type 'Chaos', 'Zeus' or 'Heracles'...">
+    <button onclick="searchGod()">Search</button>
+    <button onclick="resetView()">Reset</button>
+</div>
+
+<div class="legend">
+    <strong>Legend:</strong><br>
+    🟥 Thick line = Marriage<br>
+    🟧 Dotted line = Affair<br>
+    ➡ Arrow = Parent<br>
+    <i>Type a name to highlight the lines!</i>
+</div>
+
+<div id="mynetwork"></div>
+
+<script type="text/javascript">
+    // 1. DATA (Adding 'Chaos' as a test)
+    const nodes = new vis.DataSet([
+        { id: 0, label: 'Chaos', group: 'primordial', color: '#333', size: 30 }, // The ancestor of everyone
+        { id: 1, label: 'Zeus', group: 'god', color: '#4287f5', size: 25 },
+        { id: 2, label: 'Hera', group: 'god', color: '#f54242', size: 25 },
+        { id: 3, label: 'Leto', group: 'god', color: '#f5d842', size: 20 },
+        { id: 4, label: 'Apollo', group: 'god', color: '#42f578', size: 20 },
+        { id: 5, label: 'Artemis', group: 'god', color: '#f542d8', size: 20 },
+        { id: 6, label: 'Athena', group: 'god', color: '#8742f5', size: 20 },
+        { id: 7, label: 'Metis', group: 'titan', color: '#888', size: 15 },
+        { id: 8, label: 'Gaia', group: 'primordial', color: '#228B22', size: 25 }, // Mother of Uranus
+        { id: 9, label: 'Uranus', group: 'primordial', color: '#87CEEB', size: 25 },
+        // Relation Chaos -> Gaia (simple line for test)
+        { from: 0, to: 8, label: 'Father', arrows: 'to', color: '#333' } 
+    ]);
+
+    const edges = new vis.DataSet([
+        { from: 0, to: 8, arrows: 'to', color: '#333', label: 'Father' }, // Chaos -> Gaia
+        { from: 8, to: 9, arrows: 'to', color: '#333', label: 'Father' }, // Gaia -> Uranus
+        { from: 1, to: 2, arrows: 'to', color: '#8B0000', width: 4, label: 'Marriage', dashes: false },
+        { from: 1, to: 3, arrows: 'to', color: '#FF8C00', width: 2, label: 'Affair', dashes: [5, 5] },
+        { from: 1, to: 4, arrows: 'to', color: '#333', label: 'Father' },
+        { from: 3, to: 4, arrows: 'to', color: '#333', label: 'Mother' },
+        { from: 1, to: 5, arrows: 'to', color: '#333', label: 'Father' },
+        { from: 3, to: 5, arrows: 'to', color: '#333', label: 'Mother' },
+        { from: 7, to: 1, arrows: 'to', color: '#555', dashes: true, label: 'Swallowed' },
+        { from: 1, to: 6, arrows: 'to', color: '#FFD700', width: 3, label: 'From Head' }
+    ]);
+
+    const container = document.getElementById('mynetwork');
+    const data = { nodes: nodes, edges: edges };
+
+    const options = {
+        nodes: { shape: 'dot', font: { size: 16, face: 'Arial' }, borderWidth: 2, shadow: true },
+        edges: { smooth: { type: 'continuous' }, font: { align: 'middle', size: 12 }, arrows: { to: { enabled: true, scaleFactor: 0.5 } } },
+        physics: { enabled: true, barnesHut: { gravitationalConstant: -3000, springConstant: 0.04, springLength: 150 } },
+        interaction: { hover: true, zoomView: true, dragNodes: true }
+    };
+
+    const network = new vis.Network(container, data, options);
+
+    // ---------------------------------------------------------
+    // SEARCH LOGIC (Where the magic happens)
+    // ---------------------------------------------------------
+    
+    function searchGod() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        if (!query) return;
+
+        // 1. Find the node ID of the found god
+        const foundNodes = nodes.get({
+            filter: function (item) {
+                return item.label.toLowerCase().includes(query);
+            }
+        });
+
+        if (foundNodes.length === 0) {
+            alert("No god found with that name! (Try 'Chaos', 'Zeus', 'Gaia')");
+            return;
+        }
+
+        const targetId = foundNodes.id;
+        const targetLabel = foundNodes.label;
+
+        // 2. Find all lines (edges) connected to this god
+        // This searches for lines where the god is 'from' OR 'to'
+        const connectedEdges = edges.get({
+            filter: function (edge) {
+                return edge.from === targetId || edge.to === targetId;
+            }
+        });
+        
+        // 3. Find neighbors (people directly connected)
+        // We want to keep neighbors visible, but not as bright as the main god
+        const connectedNodeIds = new Set([targetId]);
+        connectedEdges.forEach(edge => {
+            if (edge.from !== targetId) connectedNodeIds.add(edge.from);
+            if (edge.to !== targetId) connectedNodeIds.add(edge.to);
+        });
+
+        // 4. CHANGE STYLE (Highlighting)
+        
+        // A. Make the found god BIG and bright
+        nodes.update({ id: targetId, color: '#FFD700', size: 40, font: { color: 'black', size: 20 } });
+
+        // B. Make all neighbors slightly larger and bright
+        connectedNodeIds.forEach(id => {
+            if (id !== targetId) {
+                nodes.update({ id: id, size: 25, color: '#fff' }); // White background for neighbors
+            }
+        });
+
+        // C. Make ALL lines faint (gray and thin)
+        const allEdges = edges.get();
+        edges.update(allEdges.map(edge => ({
+            id: edge.id,
+            color: { color: '#ccc' }, // Faint gray
+            width: 1,
+            dashes: false,
+            label: '' // Hide labels for a moment
+        })));
+
+        // D. Make the lines of the found god BRIGHT and thick
+        connectedEdges.forEach(edge => {
+            edges.update({
+                id: edge.id,
+                color: { color: '#FF4500' }, // Bright red-orange
+                width: 4,
+                dashes: edge.dashes, // Keep dotted line if it was an affair!
+                label: edge.label // Show label again
+            });
+        });
+
+        // E. Zoom in on the found god
+        network.focus(targetId, {
+            scale: 1.5,
+            animation: { duration: 1000, easingFunction: 'easeInOutQuad' }
+        });
+    }
+
+    // Reset function to make everything normal again
+    function resetView() {
+        // Restore all nodes
+        nodes.forEach(node => {
+            if (node.group === 'primordial') nodes.update({ id: node.id, color: node.id === 0 ? '#333' : (node.id===8 ? '#228B22' : (node.id===9 ? '#87CEEB' : '#888')), size: 25 });
+            if (node.group === 'god') nodes.update({ id: node.id, color: '#4287f5', size: 20 }); // Default color
+            // Restore colors for specific gods (simple example)
+            if (node.label === 'Zeus') nodes.update({ id: node.id, color: '#4287f5', size: 25 });
+            if (node.label === 'Hera') nodes.update({ id: node.id, color: '#f54242', size: 25 });
+            if (node.label === 'Leto') nodes.update({ id: node.id, color: '#f5d842', size: 20 });
+            // ... you can do this dynamically with data, but for the test this works
+        });
+
+        // Restore all edges
+        edges.forEach(edge => {
+            if (edge.label === 'Marriage') edges.update({ id: edge.id, color: { color: '#8B0000' }, width: 4, dashes: false, label: 'Marriage' });
+            else if (edge.label === 'Affair') edges.update({ id: edge.id, color: { color: '#FF8C00' }, width: 2, dashes: [5, 5], label: 'Affair' });
+            else if (edge.label === 'Father' || edge.label === 'Mother') edges.update({ id: edge.id, color: { color: '#333' }, width: 2, dashes: false, label: edge.label });
+            else if (edge.label === 'Swallowed') edges.update({ id: edge.id, color: { color: '#555' }, width: 2, dashes: true, label: 'Swallowed' });
+            else if (edge.label === 'From Head') edges.update({ id: edge.id, color: { color: '#FFD700' }, width: 3, dashes: false, label: 'From Head' });
+        });
+
+        // Reset zoom
+        network.fit({ animation: true });
+    }
+
+    // Add Enter key to search bar
+    document.getElementById('searchInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') searchGod();
+    });
+
+</script>
+
+</body>
+</html>
