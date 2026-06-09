@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test: Search Function Mythology</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greek Mythology Graph</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+<script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+<script src="https://unpkg.com/layout-base/layout-base.js"></script>
+<script src="https://unpkg.com/cose-base/cose-base.js"></script>
+<script src="https://unpkg.com/cytoscape-fcose/cytoscape-fcose.js"></script>
 
-    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
-    <div class="legend">
-        <strong>Legend:</strong><br>
-        🟥 Thick line = Marriage<br>
-        🟧 Dotted line = Affair<br>
-        ➡ Arrow = Parent<br>
-        <i>Type a name to highlight the lines!</i>
-    </div>
 
-    <div id="mynetwork"></div>
+<div class="legend">
+    <strong>Legend</strong><br>
+    🟢 Parent<br>
+    🔴 spouse<br>
+    🟡 afair
+</div>
 
-    <script src="../js/greek_tree.js"></script>
+<div id="cy"></div>
+
+<script src="../js/greek_tree.js"></script>
 
 </body>
-
 </html>
