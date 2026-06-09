@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greek Mythology Network</title>
+
+<script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+<script src="https://unpkg.com/layout-base/layout-base.js"></script>
+<script src="https://unpkg.com/cose-base/cose-base.js"></script>
+<script src="https://unpkg.com/cytoscape-fcose/cytoscape-fcose.js"></script>
+
+<style>
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#0f172a;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+#cy{
+    width:100%;
+    height:100%;
+}
+
+#panel{
+    position:absolute;
+    top:15px;
+    left:15px;
+    z-index:999;
+    background:rgba(15,23,42,.9);
+    color:white;
+    padding:15px;
+    border-radius:12px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 0 20px rgba(0,0,0,.4);
+}
+
+#panel h2{
+    margin:0 0 8px 0;
+    font-size:18px;
+}
+
+.legend{
+    margin-top:8px;
+    font-size:13px;
+}
+
+.legend div{
+    margin:4px 0;
+}
+
+.color{
+    display:inline-block;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    margin-right:6px;
+}
+</style>
+</head>
+<body>
+
+<div id="panel">
+    <h2>Greek Mythology</h2>
+    Drag gods around.<br>
+    Click nodes to highlight relations.
+
+    <div class="legend">
+        <div><span class="color" style="background:#22c55e"></span>Parent</div>
+        <div><span class="color" style="background:#ef4444"></span>Partner</div>
+        <div><span class="color" style="background:#f59e0b"></span>Sibling</div>
+    </div>
+</div>
+
+<div id="cy"></div>
+
+<script>
+
+const cy = cytoscape({
+
+    container: document.getElementById("cy"),
+
+    elements: [
+
+        // Primordials
+        { data:{ id:"Chaos" }},
+        { data:{ id:"Gaia" }},
+        { data:{ id:"Tartarus" }},
+        { data:{ id:"Eros" }},
+        { data:{ id:"Nyx" }},
+
+        // Gaia descendants
+        { data:{ id:"Uranus" }},
+        { data:{ id:"Pontus" }},
+
+        // Titans
+        { data:{ id:"Cronus" }},
+        { data:{ id:"Rhea" }},
+        { data:{ id:"Oceanus" }},
+        { data:{ id:"Hyperion" }},
+
+        // Olympians
+        { data:{ id:"Zeus" }},
+        { data:{ id:"Hera" }},
+        { data:{ id:"Poseidon" }},
+        { data:{ id:"Hades" }},
+        { data:{ id:"Demeter" }},
+        { data:{ id:"Hestia" }},
+
+        // Parent edges
+        { data:{ source:"Chaos", target:"Gaia", relation:"parent" }},
+        { data:{ source:"Chaos", target:"Tartarus", relation:"parent" }},
+        { data:{ source:"Chaos", target:"Nyx", relation:"parent" }},
+        { data:{ source:"Chaos", target:"Eros", relation:"parent" }},
+
+        { data:{ source:"Gaia", target:"Uranus", relation:"parent" }},
+        { data:{ source:"Gaia", target:"Pontus", relation:"parent" }},
+
+        { data:{ source:"Gaia", target:"Cronus", relation:"parent" }},
+        { data:{ source:"Uranus", target:"Cronus", relation:"parent" }},
+
+        { data:{ source:"Gaia", target:"Rhea", relation:"parent" }},
+        { data:{ source:"Uranus", target:"Rhea", relation:"parent" }},
+
+        { data:{ source:"Gaia", target:"Oceanus", relation:"parent" }},
+        { data:{ source:"Uranus", target:"Oceanus", relation:"parent" }},
+
+        { data:{ source:"Gaia", target:"Hyperion", relation:"parent" }},
+        { data:{ source:"Uranus", target:"Hyperion", relation:"parent" }},
+
+        { data:{ source:"Cronus", target:"Zeus", relation:"parent" }},
+        { data:{ source:"Rhea", target:"Zeus", relation:"parent" }},
+
+        { data:{ source:"Cronus", target:"Hera", relation:"parent" }},
+        { data:{ source:"Rhea", target:"Hera", relation:"parent" }},
+
+        { data:{ source:"Cronus", target:"Poseidon", relation:"parent" }},
+        { data:{ source:"Rhea", target:"Poseidon", relation:"parent" }},
+
+        { data:{ source:"Cronus", target:"Hades", relation:"parent" }},
+        { data:{ source:"Rhea", target:"Hades", relation:"parent" }},
+
+        { data:{ source:"Cronus", target:"Demeter", relation:"parent" }},
+        { data:{ source:"Rhea", target:"Demeter", relation:"parent" }},
+
+        { data:{ source:"Cronus", target:"Hestia", relation:"parent" }},
+        { data:{ source:"Rhea", target:"Hestia", relation:"parent" }},
+
+        // Partners
+        { data:{ source:"Gaia", target:"Uranus", relation:"partner" }},
+        { data:{ source:"Cronus", target:"Rhea", relation:"partner" }},
+        { data:{ source:"Zeus", target:"Hera", relation:"partner" }},
+
+        // Siblings
+        { data:{ source:"Zeus", target:"Poseidon", relation:"sibling" }},
+        { data:{ source:"Zeus", target:"Hades", relation:"sibling" }},
+        { data:{ source:"Zeus", target:"Demeter", relation:"sibling" }},
+        { data:{ source:"Zeus", target:"Hestia", relation:"sibling" }},
+        { data:{ source:"Zeus", target:"Hera", relation:"sibling" }}
+
+    ],
+
+    style: [
+
+        {
+            selector:"node",
+            style:{
+                "label":"data(id)",
+                "background-color":"#60a5fa",
+                "width":40,
+                "height":40,
+                "color":"white",
+                "font-size":"11px",
+                "text-outline-width":2,
+                "text-outline-color":"#1e293b",
+                "text-valign":"center",
+                "text-halign":"center"
+            }
+        },
+
+        {
+            selector:'edge[relation="parent"]',
+            style:{
+                "line-color":"#22c55e",
+                "target-arrow-color":"#22c55e",
+                "target-arrow-shape":"triangle",
+                "curve-style":"bezier",
+                "width":2
+            }
+        },
+
+        {
+            selector:'edge[relation="partner"]',
+            style:{
+                "line-color":"#ef4444",
+                "width":4
+            }
+        },
+
+        {
+            selector:'edge[relation="sibling"]',
+            style:{
+                "line-color":"#f59e0b",
+                "line-style":"dashed",
+                "width":3
+            }
+        },
+
+        {
+            selector:".highlight",
+            style:{
+                "background-color":"#fde047",
+                "line-color":"#fde047",
+                "target-arrow-color":"#fde047",
+                "transition-duration":"200ms"
+            }
+        },
+
+        {
+            selector:".faded",
+            style:{
+                "opacity":0.15
+            }
+        }
+    ],
+
+    layout:{
+        name:"fcose",
+
+        animate:true,
+        animationDuration:4000,
+
+        randomize:true,
+
+        nodeRepulsion:900000,
+        idealEdgeLength:180,
+        edgeElasticity:0.35,
+
+        gravity:0.1,
+
+        fit:true,
+        padding:50
+    }
+
+});
+
+cy.on("tap","node",(evt)=>{
+
+    cy.elements().addClass("faded");
+    cy.elements().removeClass("highlight");
+
+    const node = evt.target;
+
+    node.removeClass("faded");
+    node.addClass("highlight");
+
+    node.connectedEdges()
+        .removeClass("faded")
+        .addClass("highlight");
+
+    node.neighborhood()
+        .removeClass("faded")
+        .addClass("highlight");
+});
+
+cy.on("tap",function(event){
+    if(event.target === cy){
+        cy.elements().removeClass("faded");
+        cy.elements().removeClass("highlight");
+    }
+});
+
+// Re-bounce after dragging
+cy.on("dragfree","node",()=>{
+
+    cy.layout({
+        name:"fcose",
+        animate:true,
+        animationDuration:1500,
+        randomize:false,
+        fit:false
+    }).run();
+
+});
+
+</script>
+
+</body>
+</html>
