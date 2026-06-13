@@ -1,3 +1,83 @@
-html, body{
-    background-color: aquamarine;
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #0f172a;
+    background-image: url("../../image/couleur-annual-rings-3212803_1920.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-y: hidden;
+    font-family: sans-serif;
+    color: white;
+}
+
+#navbar ul {
+    display: flex;
+    gap: 10px;
+    list-style-type: none;
+    background-color: #022602;
+    overflow: hidden;
+    margin: 0;
+    
+}
+
+#navbar a {
+    display: block;
+    color: var(--text_color);
+    font-weight: bold;
+    text-decoration: none;
+    padding: 10px;
+    text-align: center;
+}
+
+.navbar a:hover,
+.navbar a.active {
+    background-color: #2d582d;
+}
+
+footer{
+    background-color: #1c0805;
+    padding: 5px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0
+}
+
+#legend {
+    position: absolute; 
+    top: 60px;
+    left: 20px;
+    z-index: 1000;
+    width: 160px;
+    background: #00000099;
+    backdrop-filter: blur(6px);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+/* Color */
+.dot.parent {
+    background-color: #1aff00;
+}
+
+.dot.procreation {
+    background-color: #c400ff;
+}
+
+.dot.spouse {
+    background-color: #fe03e9;
+}
+
+.dot.affair {
+    background-color: #ff8000;
 }
