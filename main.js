@@ -1,6 +1,6 @@
 console.log("main loaded");
 
-const BASE = "/";
+const BASE = "./";
 
 async function loadComponent(id, file) {
     const el = document.getElementById(id);
