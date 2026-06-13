@@ -48,7 +48,7 @@ window.graph = cytoscape({
             selector: "node",
             style: {
                 "label": "data(label)",
-                "background-color": "#60a5fa",
+                "background-color": "#042349",
                 "color": "#ffffff",
                 "text-valign": "center",
                 "text-halign": "center",
@@ -82,8 +82,8 @@ window.graph = cytoscape({
         {
             selector: 'edge[type = "mother"], edge[type = "father"], edge[type = "parent"], edge[type = "emerged"]',
             style: {
-                "line-color": "#0dd847",
-                "target-arrow-color": "#0dd847"
+                "line-color": "#1aff00",
+                "target-arrow-color": "#1aff00"
             }
         },
 
