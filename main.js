@@ -30,7 +30,16 @@ async function loadComponent(id, file) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadComponent("navbar", "navbar.html");
-    loadComponent("footer", "footer.html");
+
+function fixLinks() {
+    document.querySelectorAll("[data-link]").forEach(a => {
+        a.href = BASE + a.dataset.link;
+    });
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadComponent("navbar", "navbar.html");
+    await loadComponent("footer", "footer.html");
+
+    setTimeout(fixLinks, 0);
 });
