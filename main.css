@@ -1,36 +1,49 @@
+:root {
+    --main_color: #1c0805;
+    --secondary_color: #022602;
+    --third_color: #E5A675;
+    --falback_color: #5d3d01;
+    --text_color: var(--main_color);
+    --second_text_color: #ffffff;
+    --buttons: #79300be8;
+    --hover: #2d582d;
+
+}
+
 * {
     margin: 0;
     padding: 0;
 }
 
-html, body {
+html,
+body {
     height: 100%;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: #0f172a;
-    background-image: url("../../image/couleur-annual-rings-3212803_1920.jpg");
+    background-color: var(--falback_color);
+    background-image: url("image/couleur-annual-rings-3212803_1920.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     overflow-y: hidden;
     font-family: sans-serif;
-    color: white;
+    color: var(--text_color)
 }
 
-#navbar ul {
+.navbar ul {
     display: flex;
     gap: 10px;
     list-style-type: none;
-    background-color: #022602;
+    background-color: var(--secondary_color);
     overflow: hidden;
     margin: 0;
-    
+
 }
 
-#navbar a {
+.navbar a {
     display: block;
-    color: var(--text_color);
+    color: var(--second_text_color);
     font-weight: bold;
     text-decoration: none;
     padding: 10px;
@@ -39,11 +52,26 @@ html, body {
 
 .navbar a:hover,
 .navbar a.active {
-    background-color: #2d582d;
+    background-color: var(--hover);
 }
 
-footer{
-    background-color: #1c0805;
+.text_container:first-child {
+    margin-top: 15px;
+}
+
+.text_container {
+    max-width: 800px;
+    min-height: 200px;
+    margin: 0 auto 15px auto;
+    padding: 20px;
+    background-color: var(--third_color);
+    color: var(--text_color);
+    border-radius: 20px;
+}
+
+footer {
+    background-color: var(--main_color);
+    color: var(--second_text_color);
     padding: 5px;
     position: fixed;
     bottom: 0;
@@ -51,15 +79,16 @@ footer{
     right: 0
 }
 
-#legend {
-    position: absolute; 
+.legend {
+    position: absolute;
     top: 60px;
     left: 20px;
     z-index: 1000;
     width: 160px;
-    background: #00000099;
+    background: var(--main_color);
+    opacity: 0.9;
     backdrop-filter: blur(6px);
-    color: white;
+    color: var(--second_text_color);
     padding: 10px;
     border-radius: 10px;
     font-size: 13px;
