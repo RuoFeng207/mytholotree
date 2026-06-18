@@ -37,7 +37,8 @@ window.graph = cytoscape({
                 id: "e" + i,
                 source: e.from,
                 target: e.to,
-                type: e.type
+                type: e.type,
+                author: e.author
             }
         }))
     ],

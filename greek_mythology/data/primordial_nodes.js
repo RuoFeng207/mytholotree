@@ -4,6 +4,8 @@ export const nodes = [
     { id: "tartarus", label: "Tartarus", group: "primordial" },
     { id: "nyx", label: "Nyx", group: "primordial" },
     { id: "erebus", label: "Erebus", group: "primordial" },
-    { id: "eros", label: "Eros", group: "primordial" },
-    { id: "uranus", label: "Uranus", group: "primordial" }
+    { id: "uranus", label: "Uranus", group: "primordial" },
+    { id: "testA", label: "testA", group: "primordial" },
+    { id: "testB", label: "testB", group: "primordial" }
+
 ];

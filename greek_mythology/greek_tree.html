@@ -17,7 +17,7 @@
 
 <body>
     <div id="navbar"></div>
-    <div class = "legend">
+    <div class="legend">
         <strong>Legend</strong><br>
 
         <div class="item">
@@ -36,13 +36,20 @@
             <span class="dot affair"></span> Affair
         </div>
     </div>
+    
+    <select id="authorSelect">
+        <option value="all">All</option>
+        <option value="hesiod">Hesiod</option>
+        <option value="test">Test</option>
+    </select>
 
     <div id="cy"></div>
 
     <div id="footer"></div>
 
     <script type="module" src="./js/greek_tree.js"></script>
-    <script type="module" src="./js/filter.js"></script>
+    <script type="module" src="../filters/family-filter.js"></script>
+    <script src="../filters/author-filter.js"></script>
     <script src="../main.js"></script>
 </body>
 

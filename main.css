@@ -79,7 +79,7 @@ footer {
     right: 0
 }
 
-.legend {
+.legend, #authorSelect {
     position: absolute;
     top: 60px;
     left: 20px;
