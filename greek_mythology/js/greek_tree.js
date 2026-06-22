@@ -38,7 +38,8 @@ window.graph = cytoscape({
                 source: e.from,
                 target: e.to,
                 type: e.type,
-                author: e.author
+                author: Array.isArray(e.author) ? e.author : [e.author]
+
             }
         }))
     ],

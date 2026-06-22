@@ -25,15 +25,19 @@ window.addEventListener("load", () => {
 
         cy.edges().forEach(edge => {
 
-            const author = (edge.data("author") || "").toLowerCase();
+            const author = edge.data("author") || [];
 
-            if (author === selectedAuthor) {
+            if (author.includes(selectedAuthor)) {
 
                 visible = visible.union(edge);
                 visible = visible.union(edge.source());
                 visible = visible.union(edge.target());
             }
         });
+
+        window.graph.edges().forEach(e =>
+            console.log(e.data("author"))
+        )
 
         visible.style("display", "element");
         // visible.style("opacity", 1);
