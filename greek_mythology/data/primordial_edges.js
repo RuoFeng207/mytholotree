@@ -1,5 +1,7 @@
 export const edges = [
 
+    // Test
+    { from: "testA", to: "testB", type: "spouse", author: "test", primary: false },
     // Chaos
     { from: "chaos", to: "nyx", type: "emerged", author: "hesiod" },
     { from: "chaos", to: "erebus", type: "emerged", author: "hesiod" },
@@ -15,13 +17,17 @@ export const edges = [
 
     // Nyx
     { from: "nyx", to: "erebus", type: "spouse", author: "hesiod", primary: true },
+    { from: "nyx", to: "aether", type: "mother", author: "hesiod"},
+    { from: "nyx", to: "hemera", type: "mother", author: "hesiod"},
 
+    
     // Erebus
     { from: "erebus", to: "nyx", type: "spouse", author: "hesiod", primary: false },
+    { from: "erebus", to: "aether", type: "father", author: "hesiod"},
+    { from: "erebus", to: "hemera", type: "father", author: "hesiod"},
 
-    // Test
-    { from: "testA", to: "testB", type: "spouse", author: "test", primary: false },
-
+    // Aether
+    { from: "aether", to: "hemera", type: "spouse", author: ["hesiod","hyginus"], primary: true },
 
 
 
