@@ -10,6 +10,39 @@ window.addEventListener("load", () => {
         return;
     }
 
+    const authorsSet = new Set();
+
+    cy.edges().forEach(edge => {
+
+        const value = edge.data("author");
+
+        if (!value) return;
+
+        const list = Array.isArray(value)
+            ? value
+            : [value];
+
+        list.forEach(author => {
+            authorsSet.add(author);
+        });
+    });
+
+    const authors = [...authorsSet].sort((a, b) =>
+        a.localeCompare(b)
+    );
+
+    select.innerHTML = `<option value="all">All</option>`;
+
+    authors.forEach(author => {
+
+        const option = document.createElement("option");
+
+        option.value = author;
+        option.textContent = author.charAt(0).toUpperCase() + author.slice(1);
+
+        select.appendChild(option);
+    });
+
     function applyAuthorFilter() {
 
         const selectedAuthor = select.value.toLowerCase();
@@ -35,13 +68,13 @@ window.addEventListener("load", () => {
             }
         });
 
-        window.graph.edges().forEach(e =>
-            console.log(e.data("author"))
-        )
-
         visible.style("display", "element");
         // visible.style("opacity", 1);
 
+
+        window.graph.edges().forEach(e =>
+            console.log(e.data("author"))
+        );
     }
 
     applyAuthorFilter();
