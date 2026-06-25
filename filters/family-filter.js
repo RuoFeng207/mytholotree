@@ -24,11 +24,21 @@ window.addEventListener("load", () => {
         highlight = highlight.union(root);
 
         // Direct parents
-        const parents = root.incomers("node");
-        highlight = highlight.union(parents);
+        const visibleEdges = cy.edges().filter(edge =>
+            edge.style("display") !== "none"
+        );
 
         // Direct children
-        const children = root.outgoers("node");
+        const parents = visibleEdges
+            .filter(edge => edge.target() === root)
+            .sources();
+
+        highlight = highlight.union(parents);
+
+        const children = visibleEdges
+            .filter(edge => edge.source() === root)
+            .targets();
+
         highlight = highlight.union(children);
 
         // Direct siblings (nodes that share a parent)
@@ -36,7 +46,9 @@ window.addEventListener("load", () => {
 
         parents.forEach(parent => {
 
-            const parentChildren = parent.outgoers("node");
+            const parentChildren = visibleEdges
+                .filter(edge => edge.source() === parent)
+                .targets();
 
             siblings = siblings.union(parentChildren);
         });
