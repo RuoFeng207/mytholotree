@@ -1,5 +1,7 @@
 console.log("family filter loaded");
 
+window.selectedNode = null;
+
 window.addEventListener("load", () => {
 
     const cy = window.graph;
@@ -9,10 +11,11 @@ window.addEventListener("load", () => {
         return;
     }
 
-    // Handle node clicks
-    cy.on("tap", "node", (evt) => {
+    window.highlightSelectedNode = () => {
 
-        const root = evt.target;
+        if (!window.selectedNode) return;
+
+        const root = window.selectedNode;
 
         // Dim everything
         cy.elements().style("opacity", 0.3);
@@ -28,13 +31,13 @@ window.addEventListener("load", () => {
             edge.style("display") !== "none"
         );
 
-        // Direct children
         const parents = visibleEdges
             .filter(edge => edge.target() === root)
             .sources();
 
         highlight = highlight.union(parents);
 
+        // Direct children
         const children = visibleEdges
             .filter(edge => edge.source() === root)
             .targets();
@@ -63,7 +66,8 @@ window.addEventListener("load", () => {
 
             if (
                 highlight.contains(source) &&
-                highlight.contains(target)
+                highlight.contains(target) &&
+                edge.style("display") !== "none"
             ) {
                 highlight = highlight.union(edge);
             }
@@ -71,12 +75,25 @@ window.addEventListener("load", () => {
 
         // Apply highlight
         highlight.style("opacity", 1);
+    };
+
+    // Handle node clicks
+    cy.on("tap", "node", (evt) => {
+
+        const root = evt.target;
+
+        window.selectedNode = root;
+
+        window.highlightSelectedNode();
     });
 
     // Reset when clicking empty space
     cy.on("tap", (evt) => {
 
         if (evt.target === cy) {
+
+            window.selectedNode = null;
+
             cy.elements().style("opacity", 1);
         }
     });

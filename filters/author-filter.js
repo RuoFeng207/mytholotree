@@ -50,7 +50,13 @@ window.addEventListener("load", () => {
         cy.elements().style("display", "none");
 
         if (selectedAuthor === "all") {
+
             cy.elements().style("display", "element");
+
+            if (window.highlightSelectedNode) {
+                window.highlightSelectedNode();
+            }
+
             return;
         }
 
@@ -69,6 +75,9 @@ window.addEventListener("load", () => {
         });
 
         visible.style("display", "element");
+        if (window.highlightSelectedNode) {
+            window.highlightSelectedNode();
+        }
         // visible.style("opacity", 1);
 
 
