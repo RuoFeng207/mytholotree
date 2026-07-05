@@ -79,6 +79,16 @@ window.graph = cytoscape({
                 "color": "#ffffff"
             }
         },
+        {
+            selector: "edge.hovered",
+            style: {
+                "label": "data(type)",
+                "font-size": "10px",
+                "color": "#ffffff",
+                "width": 5,
+                "text-opacity": 1
+            }
+        },
 
         // Parents
         {
@@ -110,13 +120,29 @@ window.graph = cytoscape({
             }
         }
     ],
+});
 
-    layout: {
-        name: "fcose",
-        animate: false,
-        randomize: true,
-        fit: true,
-        idealEdgeLength: 120,
-        nodeRepulsion: 90000
-    }
+window.graph.layout({
+    name: "circle",
+    animate: false,
+    fit: true
+}).run();
+
+window.graph.layout({
+    name: "fcose",
+    animate: false,
+    randomize: false,
+    fit: false,
+    gravity: 0,
+    nodeRepulsion: 250000,
+    idealEdgeLength: 50,
+    numIter: 50
+}).run();
+
+window.graph.ready(() => {
+
+    const chaos = window.graph.$id("chaos");
+
+    window.graph.fit(chaos, 270);
+
 });

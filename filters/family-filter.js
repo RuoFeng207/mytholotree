@@ -98,4 +98,12 @@ window.addEventListener("load", () => {
         }
     });
 
+    cy.on("mouseover", "edge", (evt) => {
+        evt.target.addClass("hovered");
+    });
+
+    cy.on("mouseout", "edge", (evt) => {
+        evt.target.removeClass("hovered");
+    });
+
 });
