@@ -4,9 +4,10 @@ window.addEventListener("load", () => {
 
     const cy = window.graph;
     const select = document.getElementById("authorSelect");
+    const search = document.getElementById("authorSearch");
 
-    if (!cy || !select) {
-        console.error("Graph or select not found");
+    if (!cy || !select || !search) {
+        console.error("Search not found");
         return;
     }
 
@@ -31,18 +32,30 @@ window.addEventListener("load", () => {
         a.localeCompare(b)
     );
 
-    select.innerHTML = `<option value="all">All</option>`;
+    function populateAuthors(filter = "") {
 
-    authors.forEach(author => {
+        select.innerHTML = `<option value="all">All</option>`;
 
-        const option = document.createElement("option");
+        authors
+            .filter(author =>
+                author.toLowerCase().includes(filter.toLowerCase())
+            )
+            .forEach(author => {
 
-        option.value = author;
-        option.textContent = author.charAt(0).toUpperCase() + author.slice(1);
+                const option = document.createElement("option");
 
-        select.appendChild(option);
+                option.value = author.toLowerCase();
+                option.textContent =
+                    author.charAt(0).toUpperCase() + author.slice(1);
+
+                select.appendChild(option);
+            });
+    }
+
+    populateAuthors();
+    search.addEventListener("input", () => {
+        populateAuthors(search.value);
     });
-
     function applyAuthorFilter() {
 
         const selectedAuthor = select.value.toLowerCase();
