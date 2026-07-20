@@ -28,7 +28,7 @@ body {
     background-repeat: no-repeat;
     overflow-y: hidden;
     font-family: sans-serif;
-    color: var(--text_color)
+    color: var(--text_color);
 }
 
 .navbar ul {
@@ -38,7 +38,6 @@ body {
     background-color: var(--secondary_color);
     overflow: hidden;
     margin: 0;
-
 }
 
 .navbar a {
@@ -76,17 +75,25 @@ footer {
     position: fixed;
     bottom: 0;
     left: 0;
-    right: 0
+    right: 0;
 }
 
-.legend,
-#authorSelect {
+main {
     position: absolute;
     top: 60px;
     left: 20px;
     z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: clamp(150px, 15vw, 300px);
+}
+
+.legend,
+#authorSearch,
+#authorDropdown {
+    width: 100%;
     min-width: 120px;
-    width: 15%;
     box-sizing: border-box;
     background: var(--main_color);
     opacity: 0.9;
@@ -97,11 +104,85 @@ footer {
     font-size: 13px;
 }
 
-#authorSelect {
-    top: 190px;
+
+#authorSearch {
+
+    border: 1px solid transparent;
+
+    outline: none;
 }
 
-/* Color */
+
+#authorSearch:hover {
+
+    border-color: var(--hover);
+
+}
+
+
+#authorSearch:focus {
+
+    border-color: white;
+
+    box-shadow: 0 0 0 2px white;
+
+}
+
+
+.author-picker {
+
+    width: 100%;
+}
+
+
+#authorDropdown {
+
+    display: none;
+    margin-top: 5px;
+    max-height: 250px;
+    overflow-y: auto;
+
+}
+
+.author-option {
+
+    padding: 10px;
+
+    cursor: pointer;
+
+}
+
+
+.author-option:hover {
+
+    background: var(--hover);
+
+}
+
+#authorDropdown::-webkit-scrollbar {
+
+    width: 8px;
+
+}
+
+
+#authorDropdown::-webkit-scrollbar-track {
+
+    background: var(--main_color);
+
+}
+
+
+#authorDropdown::-webkit-scrollbar-thumb {
+
+    background: var(--hover);
+
+    border-radius: 10px;
+
+}
+
+
+/* colors */
 .dot.parent {
     background-color: #1aff00;
 }

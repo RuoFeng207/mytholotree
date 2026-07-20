@@ -3,15 +3,17 @@ console.log("author filter loaded");
 window.addEventListener("load", () => {
 
     const cy = window.graph;
-    const select = document.getElementById("authorSelect");
     const search = document.getElementById("authorSearch");
+    const dropdown = document.getElementById("authorDropdown");
 
-    if (!cy || !select || !search) {
-        console.error("Search not found");
+    if (!cy || !search || !dropdown) {
+        console.error("Graph or author elements missing");
         return;
     }
 
+
     const authorsSet = new Set();
+
 
     cy.edges().forEach(edge => {
 
@@ -28,39 +30,88 @@ window.addEventListener("load", () => {
         });
     });
 
+
     const authors = [...authorsSet].sort((a, b) =>
         a.localeCompare(b)
     );
 
+
+    let selectedAuthor = "all";
+
+
     function populateAuthors(filter = "") {
 
-        select.innerHTML = `<option value="all">All</option>`;
+        dropdown.innerHTML = "";
 
-        authors
-            .filter(author =>
-                author.toLowerCase().includes(filter.toLowerCase())
-            )
-            .forEach(author => {
 
-                const option = document.createElement("option");
+        const filtered = authors.filter(author =>
+            author.toLowerCase()
+                .includes(filter.toLowerCase())
+        );
 
-                option.value = author.toLowerCase();
-                option.textContent =
+
+        // All optie
+        const all = document.createElement("div");
+
+        all.className = "author-option";
+        all.textContent = "All";
+
+        all.onclick = () => {
+
+            selectedAuthor = "all";
+            search.value = "";
+
+            dropdown.style.display = "none";
+
+            applyAuthorFilter();
+        };
+
+        dropdown.appendChild(all);
+
+
+
+        filtered.forEach(author => {
+
+            const option = document.createElement("div");
+
+            option.className = "author-option";
+
+            option.textContent =
+                author.charAt(0).toUpperCase() + author.slice(1);
+
+
+            option.onclick = () => {
+
+                selectedAuthor = author.toLowerCase();
+
+                search.value =
                     author.charAt(0).toUpperCase() + author.slice(1);
 
-                select.appendChild(option);
-            });
+
+                dropdown.style.display = "none";
+
+                applyAuthorFilter();
+            };
+
+
+            dropdown.appendChild(option);
+
+        });
+
+
+        dropdown.style.display =
+            filtered.length || filter === ""
+                ? "block"
+                : "none";
     }
 
-    populateAuthors();
-    search.addEventListener("input", () => {
-        populateAuthors(search.value);
-    });
+
+
     function applyAuthorFilter() {
 
-        const selectedAuthor = select.value.toLowerCase();
 
         cy.elements().style("display", "none");
+
 
         if (selectedAuthor === "all") {
 
@@ -73,32 +124,62 @@ window.addEventListener("load", () => {
             return;
         }
 
+
         let visible = cy.collection();
+
 
         cy.edges().forEach(edge => {
 
             const author = edge.data("author") || [];
+
 
             if (author.includes(selectedAuthor)) {
 
                 visible = visible.union(edge);
                 visible = visible.union(edge.source());
                 visible = visible.union(edge.target());
+
             }
+
         });
 
+
         visible.style("display", "element");
+
+
         if (window.highlightSelectedNode) {
             window.highlightSelectedNode();
         }
-        // visible.style("opacity", 1);
 
-
-        window.graph.edges().forEach(e =>
-            console.log(e.data("author"))
-        );
     }
 
+
+
+    populateAuthors();
+
+
+    search.addEventListener("focus", () => {
+        populateAuthors(search.value);
+    });
+
+
+    search.addEventListener("input", () => {
+        populateAuthors(search.value);
+    });
+
+
+    // Klik buiten dropdown = sluiten
+    document.addEventListener("click", (event) => {
+
+        if (!event.target.closest(".author-picker")) {
+
+            dropdown.style.display = "none";
+
+        }
+
+    });
+
+
     applyAuthorFilter();
-    select.addEventListener("change", applyAuthorFilter);
+
 });
