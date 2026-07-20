@@ -49,8 +49,6 @@ window.addEventListener("load", () => {
                 .includes(filter.toLowerCase())
         );
 
-
-        // All optie
         const all = document.createElement("div");
 
         all.className = "author-option";
