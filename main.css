@@ -91,7 +91,9 @@ main {
 
 .legend,
 #authorSearch,
-#authorDropdown {
+#authorDropdown,
+#nodeSearch,
+#nodeDropdown {
     width: 100%;
     min-width: 120px;
     box-sizing: border-box;
@@ -106,79 +108,50 @@ main {
 
 
 #authorSearch {
-
     border: 1px solid transparent;
-
     outline: none;
 }
 
 
 #authorSearch:hover {
-
     border-color: var(--hover);
 
 }
 
 
 #authorSearch:focus {
-
     border-color: white;
-
     box-shadow: 0 0 0 2px white;
 
 }
 
-
-.author-picker {
-
+.author-picker,
+.node-picker {
     width: 100%;
 }
 
-
-#authorDropdown {
-
+#authorDropdown, 
+#nodeDropdown {
     display: none;
     margin-top: 5px;
-    max-height: 250px;
+    max-height: 100px;
     overflow-y: auto;
+    scrollbar-color: var(--hover) transparent;
+    scrollbar-width: thin;
 
+}
+
+::-moz-scrollbar-thumb {
+    border-radius: 999px;
 }
 
 .author-option {
-
     padding: 10px;
-
     cursor: pointer;
-
 }
-
 
 .author-option:hover {
-
     background: var(--hover);
-
-}
-
-#authorDropdown::-webkit-scrollbar {
-
-    width: 8px;
-
-}
-
-
-#authorDropdown::-webkit-scrollbar-track {
-
-    background: var(--main_color);
-
-}
-
-
-#authorDropdown::-webkit-scrollbar-thumb {
-
-    background: var(--hover);
-
-    border-radius: 10px;
-
 }
 
 
