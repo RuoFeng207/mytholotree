@@ -13,9 +13,16 @@ window.addEventListener("load", () => {
         return;
     }
 
-    const nodes = [...cy.nodes()].sort((a, b) =>
-        a.id().localeCompare(b.id())
-    );
+    function getAvailableNodes() {
+
+        return [...cy.nodes()]
+            .filter(node =>
+                node.style("display") !== "none"
+            )
+            .sort((a, b) =>
+                a.id().localeCompare(b.id())
+            );
+    }
 
     function focusNode(node) {
 
@@ -47,21 +54,26 @@ window.addEventListener("load", () => {
         const clear = document.createElement("div");
 
         clear.className = "author-option";
-        clear.textContent = "Clear";
+        clear.textContent = "Clear search";
 
         clear.onclick = (e) => {
             e.stopPropagation();
+
             search.value = "";
             window.selectedNode = null;
             cy.elements().style("opacity", 1);
+
             populateNodes("");
+
             dropdown.style.display = "block";
             search.focus();
-
         };
 
-        dropdown.appendChild(clear);
-
+        if (filter !== "") {
+            dropdown.appendChild(clear);
+        }
+        
+        const nodes = getAvailableNodes();
         const filtered = nodes.filter(node =>
             node.id().toLowerCase().includes(filter.toLowerCase())
         );
@@ -105,7 +117,7 @@ window.addEventListener("load", () => {
 
         const query = search.value.toLowerCase();
 
-        const match = nodes.find(node =>
+        const match = getAvailableNodes().find(node =>
             node.id().toLowerCase() === query
         );
 

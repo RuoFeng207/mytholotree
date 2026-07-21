@@ -41,7 +41,7 @@ window.addEventListener("load", () => {
 
     let selectedAuthor = "all";
     search.value = "All";
-    
+
     function populateAuthors(filter = "") {
 
         dropdown.innerHTML = "";
@@ -50,7 +50,7 @@ window.addEventListener("load", () => {
         const clear = document.createElement("div");
 
         clear.className = "author-option";
-        clear.textContent = "Clear";
+        clear.textContent = "Clear searchbar";
 
 
         clear.onclick = (e) => {
@@ -67,11 +67,6 @@ window.addEventListener("load", () => {
 
         };
 
-
-        dropdown.appendChild(clear);
-
-
-
         const all = document.createElement("div");
 
         all.className = "author-option";
@@ -81,7 +76,6 @@ window.addEventListener("load", () => {
         all.onclick = () => {
 
             selectedAuthor = "all";
-
             search.value = "All";
 
             dropdown.style.display = "none";
@@ -91,7 +85,16 @@ window.addEventListener("load", () => {
         };
 
 
-        dropdown.appendChild(all);
+        if (filter !== "") {
+            dropdown.appendChild(clear);
+        }
+
+        if (
+            filter === "" ||
+            "all".includes(filter.toLowerCase())
+        ) {
+            dropdown.appendChild(all);
+        }
 
 
 
