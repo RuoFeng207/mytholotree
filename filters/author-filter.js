@@ -1,3 +1,5 @@
+import { createSearch } from "../components/searchbar.js";
+
 console.log("author filter loaded");
 
 window.addEventListener("load", () => {
@@ -28,6 +30,7 @@ window.addEventListener("load", () => {
         list.forEach(author => {
             authorsSet.add(author);
         });
+
     });
 
 
@@ -37,9 +40,103 @@ window.addEventListener("load", () => {
 
 
     let selectedAuthor = "all";
+    search.value = "All";
+    
+    function populateAuthors(filter = "") {
+
+        dropdown.innerHTML = "";
+
+
+        const clear = document.createElement("div");
+
+        clear.className = "author-option";
+        clear.textContent = "Clear";
+
+
+        clear.onclick = (e) => {
+
+            e.stopPropagation();
+
+            search.value = "";
+
+            populateAuthors("");
+
+            dropdown.style.display = "block";
+
+            search.focus();
+
+        };
+
+
+        dropdown.appendChild(clear);
+
+
+
+        const all = document.createElement("div");
+
+        all.className = "author-option";
+        all.textContent = "All";
+
+
+        all.onclick = () => {
+
+            selectedAuthor = "all";
+
+            search.value = "All";
+
+            dropdown.style.display = "none";
+
+            applyAuthorFilter();
+
+        };
+
+
+        dropdown.appendChild(all);
+
+
+
+        const filtered = authors.filter(author =>
+            author.toLowerCase()
+                .includes(filter.toLowerCase())
+        );
+
+
+        filtered.forEach(author => {
+
+            const option = document.createElement("div");
+
+            option.className = "author-option";
+
+            option.textContent =
+                author.charAt(0).toUpperCase() + author.slice(1);
+
+
+            option.onclick = () => {
+
+                selectedAuthor = author.toLowerCase();
+
+
+                search.value =
+                    author.charAt(0).toUpperCase() + author.slice(1);
+
+
+                dropdown.style.display = "none";
+
+
+                applyAuthorFilter();
+
+            };
+
+
+            dropdown.appendChild(option);
+
+        });
+
+    }
+
+
 
     function applyAuthorFilter() {
-
 
         cy.elements().style("display", "none");
 
@@ -48,11 +145,14 @@ window.addEventListener("load", () => {
 
             cy.elements().style("display", "element");
 
+
             if (window.highlightSelectedNode) {
                 window.highlightSelectedNode();
             }
 
+
             return;
+
         }
 
 
@@ -84,19 +184,48 @@ window.addEventListener("load", () => {
 
     }
 
-    search.addEventListener("input", () => {
-        populateAuthors(search.value);
-    });
-    
-    document.addEventListener("click", (event) => {
 
-        if (!event.target.closest(".author-picker")) {
+
+    createSearch(
+        search,
+        dropdown,
+        ".author-picker",
+        populateAuthors
+    );
+
+
+
+    search.addEventListener("keydown", (e) => {
+
+        if (e.key !== "Enter") return;
+
+
+        const query = search.value.toLowerCase();
+
+
+        const match = authors.find(author =>
+            author.toLowerCase() === query
+        );
+
+
+        if (match) {
+
+            selectedAuthor = match.toLowerCase();
+
+
+            search.value =
+                match.charAt(0).toUpperCase() + match.slice(1);
+
 
             dropdown.style.display = "none";
+
+
+            applyAuthorFilter();
 
         }
 
     });
+
 
 
     applyAuthorFilter();

@@ -50,15 +50,12 @@ window.addEventListener("load", () => {
         clear.textContent = "Clear";
 
         clear.onclick = (e) => {
-
             e.stopPropagation();
-
             search.value = "";
-
+            window.selectedNode = null;
+            cy.elements().style("opacity", 1);
             populateNodes("");
-
             dropdown.style.display = "block";
-
             search.focus();
 
         };
@@ -101,5 +98,29 @@ window.addEventListener("load", () => {
         ".node-picker",
         populateNodes
     );
+
+    search.addEventListener("keydown", (e) => {
+
+        if (e.key !== "Enter") return;
+
+        const query = search.value.toLowerCase();
+
+        const match = nodes.find(node =>
+            node.id().toLowerCase() === query
+        );
+
+
+        if (match) {
+
+            search.value =
+                match.id().charAt(0).toUpperCase() + match.id().slice(1);
+
+            dropdown.style.display = "none";
+
+            focusNode(match);
+
+        }
+
+    });
 
 });
