@@ -1,3 +1,5 @@
+import { createSearch } from "../components/searchbar.js";
+
 console.log("node search loaded");
 
 window.addEventListener("load", () => {
@@ -16,6 +18,7 @@ window.addEventListener("load", () => {
     );
 
     function focusNode(node) {
+
         if (!node || node.length === 0) {
             console.error("Node not found");
             return;
@@ -34,19 +37,28 @@ window.addEventListener("load", () => {
             },
             duration: 500
         });
+
     }
-    
+
     function populateNodes(filter = "") {
+
         dropdown.innerHTML = "";
+
         const clear = document.createElement("div");
+
         clear.className = "author-option";
         clear.textContent = "Clear";
 
         clear.onclick = (e) => {
+
             e.stopPropagation();
+
             search.value = "";
+
             populateNodes("");
+
             dropdown.style.display = "block";
+
             search.focus();
 
         };
@@ -57,41 +69,37 @@ window.addEventListener("load", () => {
             node.id().toLowerCase().includes(filter.toLowerCase())
         );
 
-
-
         filtered.forEach(node => {
 
             const option = document.createElement("div");
+
             option.className = "author-option";
+
             option.textContent =
                 node.id().charAt(0).toUpperCase() + node.id().slice(1);
+
             option.onclick = () => {
-                search.value = node.id().charAt(0).toUpperCase() + node.id().slice(1);
+
+                search.value =
+                    node.id().charAt(0).toUpperCase() + node.id().slice(1);
+
                 dropdown.style.display = "none";
+
                 focusNode(node);
 
             };
 
             dropdown.appendChild(option);
+
         });
+
     }
 
-    search.addEventListener("focus", () => {
-        populateNodes(search.value);
-        dropdown.style.display = "block";
+    createSearch(
+        search,
+        dropdown,
+        ".node-picker",
+        populateNodes
+    );
 
-    });
-
-    search.addEventListener("input", () => {
-        populateNodes(search.value);
-        dropdown.style.display = "block";
-    });
-
-    document.addEventListener("click", event => {
-        if (!event.target.closest(".node-picker")) {
-            dropdown.style.display = "none";
-
-        }
-
-    });
 });

@@ -1,19 +1,30 @@
 console.log("searchbar loaded");
 
+export function createSearch(input, dropdown, container, populate) {
 
-export function createSearch(input, getItems, onResults) {
+    input.addEventListener("focus", () => {
+
+        populate(input.value);
+
+        dropdown.style.display = "block";
+
+    });
 
     input.addEventListener("input", () => {
 
-        const query = input.value.toLowerCase();
+        populate(input.value);
 
+        dropdown.style.display = "block";
 
-        const items = getItems();
+    });
 
-        const results = items.filter(item =>
-            item.toLowerCase().includes(query)
-        );
-        onResults(results);
+    document.addEventListener("click", (event) => {
+
+        if (!event.target.closest(container)) {
+
+            dropdown.style.display = "none";
+
+        }
 
     });
 
