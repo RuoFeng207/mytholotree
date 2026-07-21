@@ -38,73 +38,6 @@ window.addEventListener("load", () => {
 
     let selectedAuthor = "all";
 
-
-    function populateAuthors(filter = "") {
-
-        dropdown.innerHTML = "";
-
-
-        const filtered = authors.filter(author =>
-            author.toLowerCase()
-                .includes(filter.toLowerCase())
-        );
-
-        const all = document.createElement("div");
-
-        all.className = "author-option";
-        all.textContent = "All";
-
-        all.onclick = () => {
-
-            selectedAuthor = "all";
-            search.value = "";
-
-            dropdown.style.display = "none";
-
-            applyAuthorFilter();
-        };
-
-        dropdown.appendChild(all);
-
-
-
-        filtered.forEach(author => {
-
-            const option = document.createElement("div");
-
-            option.className = "author-option";
-
-            option.textContent =
-                author.charAt(0).toUpperCase() + author.slice(1);
-
-
-            option.onclick = () => {
-
-                selectedAuthor = author.toLowerCase();
-
-                search.value =
-                    author.charAt(0).toUpperCase() + author.slice(1);
-
-
-                dropdown.style.display = "none";
-
-                applyAuthorFilter();
-            };
-
-
-            dropdown.appendChild(option);
-
-        });
-
-
-        dropdown.style.display =
-            filtered.length || filter === ""
-                ? "block"
-                : "none";
-    }
-
-
-
     function applyAuthorFilter() {
 
 
@@ -151,20 +84,14 @@ window.addEventListener("load", () => {
 
     }
 
-
-
-    populateAuthors();
-
-
-    search.addEventListener("focus", () => {
-        populateAuthors(search.value);
-    });
-
-
     search.addEventListener("input", () => {
         populateAuthors(search.value);
     });
+<<<<<<< Updated upstream
     
+=======
+
+>>>>>>> Stashed changes
     document.addEventListener("click", (event) => {
 
         if (!event.target.closest(".author-picker")) {
