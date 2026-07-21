@@ -49,8 +49,6 @@ window.addEventListener("load", () => {
                 .includes(filter.toLowerCase())
         );
 
-
-        // All optie
         const all = document.createElement("div");
 
         all.className = "author-option";
@@ -166,9 +164,7 @@ window.addEventListener("load", () => {
     search.addEventListener("input", () => {
         populateAuthors(search.value);
     });
-
-
-    // Klik buiten dropdown = sluiten
+    
     document.addEventListener("click", (event) => {
 
         if (!event.target.closest(".author-picker")) {

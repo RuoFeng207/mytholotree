@@ -27,7 +27,7 @@ export const edges = [
     { from: "erebus", to: "hemera", type: "father", author: "hesiod"},
 
     // Aether
-    { from: "aether", to: "hemera", type: "spouse", author: ["hesiod","hyginus"], primary: true },
+    { from: "aether", to: "hemera", type: "spouse", author: ["hesiod","hyginus","a","b","c","d"], primary: true },
 
 
 
