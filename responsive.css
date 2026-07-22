@@ -16,18 +16,6 @@ footer {
     .text_container {
         margin: 10px;
     }
-
-    /* .legend,
-    #authorSelect {
-        top: 60px;
-        left: 20px;
-        width: 160px;
-    }
-
-    #authorSelect {
-        width: 180px;
-        top: 190px;
-    } */
 }
 
 @media (max-width: 768px) {
