@@ -20,6 +20,17 @@ const edges = allEdges.filter(e => {
     return true;
 });
 
+const COLORS = {
+    node: "#042349",
+    hover: "#063976",
+    text: "#ffffff",
+    parent_edge: "#1aff00",
+    spouse_edge: "#fe03e9",
+    procreation_edge: "#c400ff",
+    affair_edge: "#ff8000"
+
+};
+
 window.graph = cytoscape({
     container: document.getElementById("cy"),
 
@@ -51,11 +62,27 @@ window.graph = cytoscape({
             style: {
                 "label": "data(label)",
                 "background-color": "#042349",
-                "color": "#ffffff",
+                "color": COLORS.text,
                 "text-valign": "center",
                 "text-halign": "center",
                 "width": 40,
-                "height": 40
+                "height": 40,
+                "overlay-opacity": 0,
+                "overlay-padding": 0
+            }
+        },
+
+        {
+            selector: "node:selected",
+            style: {
+                "background-color": "#063976",
+            }
+        },
+
+        {
+            selector: "node.hovered",
+            style: {
+                "background-color": "#063976"
             }
         },
 
@@ -67,7 +94,9 @@ window.graph = cytoscape({
                 "target-arrow-color": "#2f3230",
                 "target-arrow-shape": "triangle",
                 "curve-style": "bezier",
-                "label": ""
+                "label": "",
+                "overlay-opacity": 0,
+                "overlay-padding": 0
             }
         },
 
@@ -118,6 +147,17 @@ window.graph = cytoscape({
                 "target-arrow-shape": "none",
                 "source-arrow-shape": "none"
             }
+        },
+
+        // Affair
+        {
+            selector: 'edge[type = "affair"]',
+            style: {
+                "line-color": "#ff8000",
+                "line-style": "dashed",
+                "target-arrow-shape": "none",
+                "source-arrow-shape": "none"
+            }
         }
     ],
 });
@@ -144,5 +184,31 @@ window.graph.ready(() => {
     const chaos = window.graph.$id("chaos");
 
     window.graph.fit(chaos, 270);
+
+    window.graph.on("mouseover", "node", (evt) => {
+        evt.target.addClass("hovered");
+    });
+
+    window.graph.on("mouseout", "node", (evt) => {
+        evt.target.removeClass("hovered");
+    });
+
+    window.graph.on("mouseover", "edge", (evt) => {
+
+        const edge = evt.target;
+
+        edge.data("oldWidth", edge.style("width"));
+
+        edge.style("width", parseFloat(edge.style("width")) * 2);
+
+    });
+
+    window.graph.on("mouseout", "edge", (evt) => {
+
+        const edge = evt.target;
+
+        edge.style("width", edge.data("oldWidth"));
+
+    });
 
 });
