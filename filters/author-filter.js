@@ -40,7 +40,9 @@ window.addEventListener("load", () => {
 
 
     let selectedAuthor = "all";
+
     search.value = "All";
+
 
     function populateAuthors(filter = "") {
 
@@ -67,6 +69,7 @@ window.addEventListener("load", () => {
 
         };
 
+
         const all = document.createElement("div");
 
         all.className = "author-option";
@@ -76,6 +79,7 @@ window.addEventListener("load", () => {
         all.onclick = () => {
 
             selectedAuthor = "all";
+
             search.value = "All";
 
             dropdown.style.display = "none";
@@ -85,23 +89,41 @@ window.addEventListener("load", () => {
         };
 
 
+        const filtered = authors.filter(author =>
+            author.toLowerCase()
+                .includes(filter.toLowerCase())
+        );
+
+        if (
+            filtered.length === 0 &&
+            filter !== "" &&
+            filter.toLowerCase() !== "all"
+        ) {
+
+            const error = document.createElement("div");
+
+            error.className = "author-option error-option";
+            error.textContent =
+                `No author "${filter}" found.`;
+
+            dropdown.appendChild(error);
+
+            dropdown.appendChild(clear);
+
+            return;
+
+        }
+        
         if (filter !== "") {
             dropdown.appendChild(clear);
         }
 
         if (
             filter === "" ||
-            "all".includes(filter.toLowerCase())
+            filter.toLowerCase() === "all"
         ) {
             dropdown.appendChild(all);
         }
-
-
-
-        const filtered = authors.filter(author =>
-            author.toLowerCase()
-                .includes(filter.toLowerCase())
-        );
 
 
         filtered.forEach(author => {
@@ -109,6 +131,7 @@ window.addEventListener("load", () => {
             const option = document.createElement("div");
 
             option.className = "author-option";
+
 
             option.textContent =
                 author.charAt(0).toUpperCase() + author.slice(1);
@@ -136,8 +159,6 @@ window.addEventListener("load", () => {
         });
 
     }
-
-
 
     function applyAuthorFilter() {
 
@@ -203,7 +224,22 @@ window.addEventListener("load", () => {
         if (e.key !== "Enter") return;
 
 
-        const query = search.value.toLowerCase();
+        const query = search.value.trim().toLowerCase();
+
+
+        if (query === "" || query === "all") {
+
+            selectedAuthor = "all";
+
+            search.value = "All";
+
+            dropdown.style.display = "none";
+
+            applyAuthorFilter();
+
+            return;
+
+        }
 
 
         const match = authors.find(author =>
@@ -224,6 +260,13 @@ window.addEventListener("load", () => {
 
 
             applyAuthorFilter();
+
+        }
+        else {
+
+            populateAuthors(query);
+
+            dropdown.style.display = "block";
 
         }
 

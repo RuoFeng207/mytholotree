@@ -54,7 +54,7 @@ window.addEventListener("load", () => {
         const clear = document.createElement("div");
 
         clear.className = "author-option";
-        clear.textContent = "Clear search";
+        clear.textContent = "Clear searchbar";
 
         clear.onclick = (e) => {
             e.stopPropagation();
@@ -66,17 +66,40 @@ window.addEventListener("load", () => {
             populateNodes("");
 
             dropdown.style.display = "block";
+
             search.focus();
+
         };
 
-        if (filter !== "") {
-            dropdown.appendChild(clear);
-        }
-        
         const nodes = getAvailableNodes();
         const filtered = nodes.filter(node =>
             node.id().toLowerCase().includes(filter.toLowerCase())
         );
+
+
+        if (
+            filtered.length === 0 &&
+            filter !== ""
+        ) {
+
+            const error = document.createElement("div");
+
+            error.className = "author-option error-option";
+
+            error.textContent =
+                `No node "${filter}" found.`;
+
+            dropdown.appendChild(error);
+
+            dropdown.appendChild(clear);
+
+            return;
+
+        }
+
+        if (filter !== "") {
+            dropdown.appendChild(clear);
+        }
 
         filtered.forEach(node => {
 
@@ -85,12 +108,14 @@ window.addEventListener("load", () => {
             option.className = "author-option";
 
             option.textContent =
-                node.id().charAt(0).toUpperCase() + node.id().slice(1);
+                node.id().charAt(0).toUpperCase() +
+                node.id().slice(1);
 
             option.onclick = () => {
 
                 search.value =
-                    node.id().charAt(0).toUpperCase() + node.id().slice(1);
+                    node.id().charAt(0).toUpperCase() +
+                    node.id().slice(1);
 
                 dropdown.style.display = "none";
 
@@ -115,7 +140,9 @@ window.addEventListener("load", () => {
 
         if (e.key !== "Enter") return;
 
-        const query = search.value.toLowerCase();
+
+        const query = search.value.trim().toLowerCase();
+
 
         const match = getAvailableNodes().find(node =>
             node.id().toLowerCase() === query
@@ -130,7 +157,10 @@ window.addEventListener("load", () => {
             dropdown.style.display = "none";
 
             focusNode(match);
-
+        }
+        else {
+            populateNodes(query);
+            dropdown.style.display = "block";
         }
 
     });
