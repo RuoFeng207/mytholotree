@@ -31,6 +31,9 @@ window.addEventListener("load", () => {
             return;
         }
 
+        cy.nodes().unselect();
+        node.select();
+
         window.selectedNode = node;
 
         if (window.highlightSelectedNode) {
